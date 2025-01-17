@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\Employee;
 use App\Jobs\SendWelcomeEmail;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class EmployeeController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -50,6 +52,7 @@ class EmployeeController extends Controller
     public function show(Project $project, Employee $employee)
     {
         //
+        $this->authorize('view', $employee);
         if ($employee->project_id !== $project->id) {
             abort(404);
         }
