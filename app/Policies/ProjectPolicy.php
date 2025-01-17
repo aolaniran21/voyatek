@@ -21,7 +21,7 @@ class ProjectPolicy
      */
     public function view(User $user, Project $project): bool
     {
-        return false;
+        return $user->hasRole('Manager') && $user->projects->contains($project);
     }
 
     /**

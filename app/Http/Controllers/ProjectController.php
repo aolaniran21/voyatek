@@ -53,6 +53,7 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         //
+        $this->authorize('view', $project);
         return response()->json($project->load('employees'));
     }
 

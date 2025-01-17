@@ -17,6 +17,7 @@ class RoleController extends Controller
     //
     public function assignRole(Request $request, User $user)
     {
+        $this->authorize('manageRoles', Role::class);
         $request->validate([
             'role_id' => 'required|exists:roles,id',
         ]);
@@ -29,6 +30,7 @@ class RoleController extends Controller
 
     public function removeRole(Request $request, User $user)
     {
+        $this->authorize('manageRoles', Role::class);
         $request->validate([
             'role_id' => 'required|exists:roles,id',
         ]);

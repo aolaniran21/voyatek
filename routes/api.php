@@ -21,9 +21,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('employees/{id}/restore', [EmployeeController::class, 'restore']);
 
+    Route::middleware('role:Admin')->group(function () {
+        Route::post('users/{user}/assign-role', [RoleController::class, 'assignRole']);
+        Route::post('users/{user}/remove-role', [RoleController::class, 'removeRole']);
+    });
 
-    Route::post('users/{user}/assign-role', [RoleController::class, 'assignRole']);
-    Route::post('users/{user}/remove-role', [RoleController::class, 'removeRole']);
+    Route::middleware('role:Manager')->group(function () {
+        Route::get('/projects/{project}', [ProjectController::class, 'show']);
+    });
+
+    Route::middleware('role:Employee')->group(function () {
+        Route::get('/employees/{employee}', [EmployeeController::class, 'show']);
+    });
 });
 
 Route::post('register', [AuthController::class, 'register']);
