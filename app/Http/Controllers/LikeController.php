@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Like;
+use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
@@ -65,7 +67,27 @@ class LikeController extends Controller
 
     public function likePost(Request $request, $postId)
     {
-        Like::create(['post_id' => $postId, 'user_id' => 1]); // Using user 1 from seeder
-        return response()->json(['message' => 'Post liked']);
+        // Ensure the post exists
+        $post = Post::findOrFail($postId);
+
+        // Get the authenticated user
+        $userId = Auth::id();
+
+        // Check if the user already liked the post
+        $existingLike = Like::where('post_id', $postId)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($existingLike) {
+            return response()->json(['message' => 'You have already liked this post'], 409);
+        }
+
+        // Create a new like
+        Like::create([
+            'post_id' => $postId,
+            'user_id' => $userId
+        ]);
+
+        return response()->json(['message' => 'Post liked successfully']);
     }
 }
