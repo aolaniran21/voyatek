@@ -3,36 +3,33 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 
-Route::middleware('auth:sanctum')->group(function () {
+
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommentController;
+
+Route::middleware(['token'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
-    Route::resource('projects', ProjectController::class);
-    Route::resource('projects.employees', EmployeeController::class)->shallow();
+    Route::get('/blogs', [BlogController::class, 'index']);
+    Route::get('/blogs/{id}', [BlogController::class, 'show']);
+    Route::put('/blogs/{id}', [BlogController::class, 'update']);
+    Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
 
-    Route::get('projects/dashboard', [ProjectController::class, 'dashboard']);
-    Route::get('projects/search', [ProjectController::class, 'search']);
+    Route::get('/blogs/{blogId}/posts', [PostController::class, 'index']);
+    Route::post('/blogs/{blogId}/posts', [PostController::class, 'store']);
+    Route::get('/posts/{id}', [PostController::class, 'show']);
+    Route::put('/posts/{id}', [PostController::class, 'update']);
+    Route::delete('/posts/{id}', [PostController::class, 'destroy']);
 
-    Route::post('employees/{id}/restore', [EmployeeController::class, 'restore']);
-
-    Route::middleware('role:Admin')->group(function () {
-        Route::post('users/{user}/assign-role', [RoleController::class, 'assignRole']);
-        Route::post('users/{user}/remove-role', [RoleController::class, 'removeRole']);
-    });
-
-    Route::middleware('role:Manager')->group(function () {
-        Route::get('/projects/{project}', [ProjectController::class, 'show']);
-    });
-
-    Route::middleware('role:Employee')->group(function () {
-        Route::get('/employees/{employee}', [EmployeeController::class, 'show']);
-    });
+    Route::post('posts/{postId}/like', [LikeController::class, 'likePost']);
+    Route::post('posts/{postId}/comment', [CommentController::class, 'commentPost']);
 });
 
 Route::post('register', [AuthController::class, 'register']);

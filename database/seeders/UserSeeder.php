@@ -16,17 +16,30 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // Create an admin user
-        $admin = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
+        // Create an user
+        $user = User::create([
+            'name' => 'User',
+            'email' => 'user@example.com',
             'password' => Hash::make('password'),
         ]);
 
         // Get the admin role
-        $adminRole = Role::where('name', 'Admin')->first();
+        $userRole = Role::where('name', 'User')->first();
 
         // Attach the admin role to the user
-        $admin->roles()->attach($adminRole);
+        $user->roles()->attach($userRole);
+
+
+        $viewer = User::factory()->create([
+            'name' => 'Viewer User',
+            'email' => 'viewer@example.com',
+            'password' => bcrypt('viewer123'),
+        ]);
+
+        // Get the admin role
+        $viewerRole = Role::where('name', 'Viewer')->first();
+
+        // Attach the admin role to the user
+        $viewer->roles()->attach($viewerRole);
     }
 }

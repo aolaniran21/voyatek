@@ -6,18 +6,15 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
-    protected $middlewareGroups = [
 
-
-        'api' => [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'throttle:api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ],
-
-    ];
-
+    // protected $middlewareGroups = [
+    //     'api' => [
+    //         'throttle:api',
+    //         \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    //     ],
+    // ];
     protected $routeMiddleware = [
-        'role' => \App\Http\Middleware\RoleMiddleware::class,
+        // 'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'token' => \App\Http\Middleware\TokenAuthMiddleware::class,
     ];
 }

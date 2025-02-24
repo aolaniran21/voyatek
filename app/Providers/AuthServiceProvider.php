@@ -19,9 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        Project::class => ProjectPolicy::class,
         Role::class => RolePolicy::class,
-        Employee::class => EmployeePolicy::class,
     ];
 
     public function boot()
